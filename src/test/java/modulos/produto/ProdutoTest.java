@@ -75,4 +75,23 @@ public class ProdutoTest {
 
 
     }
+    @Test
+    @DisplayName("Validar os limites proibidos abaixo de 0,00 do valor do Produto")
+    public void testValidarLimiteMenorProibidoValorProduto() {
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("token", this.token)
+                .body(ProdutoDataFactory.criarProdutoComumComOValorIgualA(-0.00))
+
+                .when()
+                .post("/v2/produtos")
+
+                .then()
+                .assertThat()
+                .body("error", equalTo("O valor do produto deve estar entre R$ 0,01 e R$ 7.000,00"))
+                .statusCode(422);
+
+
+    }
 }
